@@ -2,16 +2,24 @@ package org.example.s29624tpo11.DTOs;
 
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 
 public class UpdateLinkDTO {
 
-    @Size(max = 200, message = "Name cannot exceed 200 characters")
+    @Size(min = 5, max = 20, message = "{name.size}")
     private String name;
 
-    @Pattern(regexp = "^https?://.*", message = "URL must start with http:// or https://")
+    @Pattern(regexp = "^$|^https://.*", message = "{url.https}")
     private String targetUrl;
 
-    @Size(max = 100, message = "Password cannot exceed 100 characters")
+    @Pattern.List({
+            @Pattern(regexp = "^$|^.{10,}$", message = "{password.length.min}"),
+            @Pattern(regexp = "^$|^.*[a-z].*$", message = "{password.lowercase.required}"),
+            @Pattern(regexp = "^$|^(.*[A-Z]){2,}.*$", message = "{password.uppercase.min}"),
+            @Pattern(regexp = "^$|^(.*[0-9]){3,}.*$", message = "{password.digits.min}"),
+            @Pattern(regexp = "^$|^(.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]){4,}.*$", message = "{password.special.min}")
+    })
+    @Length(max = 100, message = "Password cannot exceed 100 characters")
     private String password;
 
     public UpdateLinkDTO() {}
@@ -25,4 +33,3 @@ public class UpdateLinkDTO {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 }
-
