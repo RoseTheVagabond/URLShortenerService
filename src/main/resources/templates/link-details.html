@@ -4,215 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="#{details.title} + ' - ' + #{app.title}">Link Details - URL Shortener</title>
-
-    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/styles.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <!-- Google Fonts for better international character support -->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">-->
-
-    <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            font-feature-settings: "kern" 1, "liga" 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            background-color: #f8f9fa;
-        }
-
-        .navbar-brand {
-            font-weight: 600;
-            font-size: 1.5rem;
-        }
-
-        .main-content {
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: none;
-            border-radius: 1rem;
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 1rem 1rem 0 0 !important;
-            padding: 1.5rem;
-        }
-
-        .card-body {
-            padding: 2rem;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #495057;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-control-plaintext {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #e9ecef;
-            margin-bottom: 1rem;
-            word-break: break-all;
-        }
-
-        .form-control {
-            border: 1px solid #dee2e6;
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.15);
-            outline: none;
-        }
-
-        .input-group .form-control {
-            border-right: none;
-            border-radius: 0.5rem 0 0 0.5rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            border: none;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            border: none;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-danger:hover {
-            background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
-        }
-
-        .btn-outline-secondary {
-            border: 1px solid #6c757d;
-            color: #6c757d;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline-secondary:hover {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        .copy-btn {
-            border-radius: 0 0.5rem 0.5rem 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .copy-btn:hover {
-            background-color: #5a6268;
-        }
-
-        .footer {
-            margin-top: 3rem;
-            padding: 2rem 0;
-            border-top: 1px solid #dee2e6;
-            color: #6c757d;
-            background-color: white;
-        }
-
-        .language-selector {
-            min-width: 120px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-        }
-
-        .language-selector:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-            color: white;
-        }
-
-        .invalid-feedback {
-            display: block;
-            font-size: 0.875rem;
-            color: #dc3545;
-            margin-top: 0.5rem;
-        }
-
-        .is-invalid {
-            border-color: #dc3545;
-        }
-
-        .details-icon {
-            font-size: 3rem;
-            color: #007bff;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-        }
-
-        .copy-success {
-            color: #28a745;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .edit-section {
-            border-top: 1px solid #dee2e6;
-            padding-top: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .badge {
-            font-size: 1rem;
-            padding: 0.5rem 1rem;
-        }
-
-        .form-text {
-            color: #6c757d;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-
-        .navbar {
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .alert {
-            border: none;
-            border-radius: 0.75rem;
-            font-weight: 500;
-        }
-
-        .text-break {
-            word-break: break-word;
-        }
-    </style>
 </head>
 <body>
-<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" th:href="@{/}" th:text="#{app.title}">URL Shortener</a>
@@ -234,7 +29,6 @@
                 </li>
             </ul>
 
-            <!-- Language Selector -->
             <div class="dropdown">
                 <button class="btn btn-outline-light dropdown-toggle language-selector" type="button" data-bs-toggle="dropdown">
                     <span th:text="#{nav.language}">Language</span>
@@ -249,17 +43,13 @@
     </div>
 </nav>
 
-<!-- Main Content -->
 <div class="container main-content">
-    <!-- Flash Messages -->
     <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${successMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
     <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
         <span th:text="${errorMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
     <div class="row justify-content-center">
@@ -270,7 +60,6 @@
                     <h2 class="card-title mb-0" th:text="#{details.title}">Link Details</h2>
                 </div>
                 <div class="card-body" th:if="${link}">
-                    <!-- Link Information -->
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -303,25 +92,17 @@
                                 <label class="form-label fw-bold" th:text="#{details.redirect.url}">Short URL</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" th:value="${link.redirectUrl}" id="shortUrl" readonly>
-                                    <button class="btn btn-outline-secondary copy-btn" type="button" onclick="copyToClipboard()">
-                                        📋
-                                    </button>
-                                </div>
-                                <div id="copySuccess" class="copy-success mt-1" style="display: none;">
-                                    Copied to clipboard!
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Edit Section -->
                     <div class="edit-section">
                         <h4 class="mb-3" th:text="#{details.edit}">Edit Link</h4>
 
                         <form th:action="@{'/link/' + ${link.id} + '/edit'}" th:object="${updateLinkDTO}" method="post">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <!-- New Name Field -->
                                     <div class="mb-3">
                                         <label for="name" class="form-label" th:text="#{edit.form.name}">New Name</label>
                                         <input type="text"
@@ -335,7 +116,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- New Target URL Field -->
                                     <div class="mb-3">
                                         <label for="targetUrl" class="form-label" th:text="#{edit.form.url}">New Target URL</label>
                                         <input type="url"
@@ -351,7 +131,6 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <!-- Current Password Field -->
                                     <div class="mb-3">
                                         <label for="password" class="form-label" th:text="#{edit.form.password}">Current Password</label>
                                         <input type="password"
@@ -363,17 +142,13 @@
                                         <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
                                             <span th:errors="*{password}"></span>
                                         </div>
-                                        <div class="form-text">
-                                            <small>Required only if link is password protected</small>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Action Buttons -->
                             <div class="d-flex gap-2 justify-content-center">
                                 <button type="submit" class="btn btn-primary" th:text="#{edit.form.submit}">Update Link</button>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" th:text="#{details.delete}">Delete Link</button>
+                                <button type="submit" class="btn btn-danger" th:formaction="@{'/link/' + ${link.id} + '/delete'}" th:text="#{details.delete}">Delete Link</button>
                             </div>
                         </form>
                     </div>
@@ -387,60 +162,5 @@
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" th:text="#{details.delete}">Delete Link</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p th:text="#{delete.confirm}">Are you sure you want to delete this link?</p>
-            </div>
-            <div class="modal-footer">
-                <form th:action="@{'/link/' + ${link.id} + '/delete'}" method="post">
-                    <input type="hidden" name="password" id="deletePassword">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{delete.cancel}">Cancel</button>
-                    <button type="submit" class="btn btn-danger" th:text="#{delete.confirm.button}">Yes, Delete</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="text-center">
-            <small>&copy; 2025 URL Shortener. All rights reserved.</small>
-        </div>
-    </div>
-</footer>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
-<script>
-    function copyToClipboard() {
-        const shortUrlInput = document.getElementById('shortUrl');
-        shortUrlInput.select();
-        shortUrlInput.setSelectionRange(0, 99999);
-
-        navigator.clipboard.writeText(shortUrlInput.value).then(function() {
-            const successDiv = document.getElementById('copySuccess');
-            successDiv.style.display = 'block';
-            setTimeout(() => {
-                successDiv.style.display = 'none';
-            }, 2000);
-        });
-    }
-
-    // Transfer password from edit form to delete form
-    document.getElementById('deleteModal').addEventListener('show.bs.modal', function() {
-        const editPassword = document.getElementById('password').value;
-        document.getElementById('deletePassword').value = editPassword;
-    });
-</script>
 </body>
 </html>

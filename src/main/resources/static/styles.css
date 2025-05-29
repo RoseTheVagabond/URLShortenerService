@@ -1,8 +1,4 @@
 body {
-    font-family: 'Times New Roman', Times, serif;
-    font-feature-settings: "kern" 1, "liga" 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     background-color: #f8f9fa;
 }
 
@@ -14,6 +10,15 @@ body {
 .main-content {
     margin-top: 2rem;
     margin-bottom: 2rem;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
 }
 
 .card {
@@ -96,6 +101,38 @@ body {
     transform: translateY(-1px);
 }
 
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border: none;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+.btn-light {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    color: #333;
+    font-weight: 500;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-light:hover {
+    background: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+    color: #333;
+}
+
 .copy-btn {
     border-radius: 0 0.5rem 0.5rem 0;
     cursor: pointer;
@@ -134,6 +171,13 @@ body {
     color: white;
 }
 
+.details-icon {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
 .success-icon {
     font-size: 4rem;
     color: #28a745;
@@ -147,6 +191,13 @@ body {
     font-weight: 500;
 }
 
+.search-icon {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
 .invalid-feedback {
     display: block;
     font-size: 0.875rem;
@@ -158,10 +209,37 @@ body {
     border-color: #dc3545;
 }
 
+.edit-section {
+    border-top: 1px solid #dee2e6;
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.badge {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
 .form-text {
     color: #6c757d;
     font-size: 0.875rem;
     margin-top: 0.5rem;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.display-4 {
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
 }
 
 .navbar {
@@ -172,5 +250,9 @@ body {
     border: none;
     border-radius: 0.75rem;
     font-weight: 500;
+}
+
+.text-break {
+    word-break: break-word;
 }
 

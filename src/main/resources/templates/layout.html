@@ -4,54 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="#{app.title}">URL Shortener</title>
-
-    <!-- Bootstrap CSS -->
-    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
-
-    <style>
-        .navbar-brand {
-            font-weight: bold;
-        }
-
-        .main-content {
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            border: 1px solid rgba(0, 0, 0, 0.125);
-        }
-
-        .card-header {
-            background-color: #f8f9fa;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-        }
-
-        .btn-primary {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-        }
-
-        .btn-primary:hover {
-            background-color: #0b5ed7;
-            border-color: #0a58ca;
-        }
-
-        .footer {
-            margin-top: 3rem;
-            padding: 1rem 0;
-            border-top: 1px solid #dee2e6;
-            color: #6c757d;
-        }
-
-        .language-selector {
-            min-width: 120px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" th:href="@{/}" th:text="#{app.title}">URL Shortener</a>
@@ -73,7 +29,6 @@
                 </li>
             </ul>
 
-            <!-- Language Selector -->
             <div class="dropdown">
                 <button class="btn btn-outline-light dropdown-toggle language-selector" type="button" data-bs-toggle="dropdown">
                     <span th:text="#{nav.language}">Language</span>
@@ -88,35 +43,10 @@
     </div>
 </nav>
 
-<!-- Main Content -->
 <div class="container main-content">
-    <!-- Flash Messages -->
-    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${successMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-
-    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span th:text="${errorMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-
-    <!-- Page Content -->
     <div th:fragment="content">
-        <!-- Content will be replaced by individual templates -->
+
     </div>
 </div>
-
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="text-center">
-            <small>&copy; 2025 URL Shortener. All rights reserved.</small>
-        </div>
-    </div>
-</footer>
-
-<!-- Bootstrap JS -->
-<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
