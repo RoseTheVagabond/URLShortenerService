@@ -1,84 +1,150 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: html}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title th:text="#{app.title}">Link Shortener</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Shortener</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+    .card { border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
+    .btn-custom { border-radius: 25px; padding: 10px 30px; font-weight: 600; }
+    .form-control { border-radius: 15px; }
+  </style>
 </head>
 <body>
-<div th:fragment="content">
-  <div class="card card-custom">
-    <div class="card-body p-5">
+<div class="container py-5">
+  <!-- Language Selector -->
+  <div class="position-fixed top-0 end-0 p-3">
+    <div class="btn-group">
+      <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="bi bi-globe"></i> Language
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="?lang=en">English</a></li>
+        <li><a class="dropdown-item" href="?lang=pl">Polski</a></li>
+        <li><a class="dropdown-item" href="?lang=de">Deutsch</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
       <div class="text-center mb-4">
-        <h1 class="display-4 fw-bold text-primary" th:text="#{app.title}">Link Shortener</h1>
-        <p class="lead text-muted" th:text="#{app.subtitle}">Create and manage your short links</p>
+        <h1 class="display-4 fw-bold text-white">
+          <span th:if="${lang == 'pl'}">Skracacz Linków</span>
+          <span th:if="${lang == 'de'}">Link-Verkürzer</span>
+          <span th:if="${lang == 'en' or lang == null}">Link Shortener</span>
+        </h1>
+        <p class="lead text-white-50">
+          <span th:if="${lang == 'pl'}">Twórz i zarządzaj swoimi krótkimi linkami</span>
+          <span th:if="${lang == 'de'}">Erstellen und verwalten Sie Ihre Kurz-Links</span>
+          <span th:if="${lang == 'en' or lang == null}">Create and manage your short links</span>
+        </p>
       </div>
 
-      <!-- Error Message -->
-      <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        <span th:text="${errorMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <div class="card">
+        <div class="card-body p-5">
+          <!-- Error Message -->
+          <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+
+          <!-- Create Link Form -->
+          <form action="/create" th:object="${createLinkDTO}" method="post">
+            <input type="hidden" name="lang" th:value="${lang}">
+
+            <div class="mb-4">
+              <label for="name" class="form-label fw-semibold">
+                <span th:if="${lang == 'pl'}">Nazwa</span>
+                <span th:if="${lang == 'de'}">Name</span>
+                <span th:if="${lang == 'en' or lang == null}">Name</span>
+              </label>
+              <input type="text"
+                     id="name"
+                     th:field="*{name}"
+                     class="form-control"
+                     th:placeholder="${lang == 'pl'} ? 'Wprowadź nazwę linku (5-20 znaków)' : (${lang == 'de'} ? 'Link-Namen eingeben (5-20 Zeichen)' : 'Enter link name (5-20 characters)')"
+                     th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+              <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                <div th:each="error : ${#fields.errors('name')}" th:text="${error}"></div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="targetUrl" class="form-label fw-semibold">
+                <span th:if="${lang == 'pl'}">Docelowy URL</span>
+                <span th:if="${lang == 'de'}">Ziel-URL</span>
+                <span th:if="${lang == 'en' or lang == null}">Target URL</span>
+              </label>
+              <input type="url"
+                     id="targetUrl"
+                     th:field="*{targetUrl}"
+                     class="form-control"
+                     th:placeholder="${lang == 'pl'} ? 'Wprowadź adres HTTPS' : (${lang == 'de'} ? 'HTTPS-Adresse eingeben' : 'Enter HTTPS URL')"
+                     th:classappend="${#fields.hasErrors('targetUrl')} ? 'is-invalid' : ''">
+              <div th:if="${#fields.hasErrors('targetUrl')}" class="invalid-feedback">
+                <div th:each="error : ${#fields.errors('targetUrl')}" th:text="${error}"></div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="password" class="form-label fw-semibold">
+                <span th:if="${lang == 'pl'}">Hasło (opcjonalne)</span>
+                <span th:if="${lang == 'de'}">Passwort (optional)</span>
+                <span th:if="${lang == 'en' or lang == null}">Password (optional)</span>
+              </label>
+              <input type="password"
+                     id="password"
+                     th:field="*{password}"
+                     class="form-control"
+                     th:placeholder="${lang == 'pl'} ? 'Wprowadź złożone hasło' : (${lang == 'de'} ? 'Komplexes Passwort eingeben' : 'Enter complex password')"
+                     th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
+              <small class="form-text text-muted">
+                <i class="bi bi-info-circle me-1"></i>
+                <span th:if="${lang == 'pl'}">Wymagania hasła: 10+ znaków, 1+ mała litera, 2+ wielkie litery, 3+ cyfry, 4+ znaki specjalne</span>
+                <span th:if="${lang == 'de'}">Passwort-Anforderungen: 10+ Zeichen, 1+ Kleinbuchstabe, 2+ Großbuchstaben, 3+ Ziffern, 4+ Sonderzeichen</span>
+                <span th:if="${lang == 'en' or lang == null}">Password requirements: 10+ characters, 1+ lowercase, 2+ uppercase, 3+ digits, 4+ special characters</span>
+              </small>
+              <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
+                <div th:each="error : ${#fields.errors('password')}" th:text="${error}"></div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary btn-lg btn-custom">
+                <i class="bi bi-link-45deg me-2"></i>
+                <span th:if="${lang == 'pl'}">Utwórz Link</span>
+                <span th:if="${lang == 'de'}">Link erstellen</span>
+                <span th:if="${lang == 'en' or lang == null}">Create Link</span>
+              </button>
+            </div>
+          </form>
+
+          <div class="text-center mt-4">
+            <p class="text-muted">
+              <small>
+                <span th:if="${lang == 'pl'}">Masz już link? </span>
+                <span th:if="${lang == 'de'}">Haben Sie bereits einen Link? </span>
+                <span th:if="${lang == 'en' or lang == null}">Already have a link? </span>
+              </small>
+            </p>
+            <a th:href="@{/view(lang=${lang})}" class="btn btn-outline-primary btn-custom">
+              <i class="bi bi-search me-2"></i>
+              <span th:if="${lang == 'pl'}">Zobacz Link</span>
+              <span th:if="${lang == 'de'}">Link anzeigen</span>
+              <span th:if="${lang == 'en' or lang == null}">View Link</span>
+            </a>
+          </div>
+        </div>
       </div>
-
-      <!-- Create Link Form -->
-      <form th:action="@{/create}" th:object="${createLinkDTO}" method="post">
-        <div class="mb-4">
-          <label for="name" class="form-label fw-semibold" th:text="#{form.name}">Name</label>
-          <input type="text"
-                 id="name"
-                 th:field="*{name}"
-                 class="form-control form-control-custom"
-                 th:placeholder="#{form.name.placeholder}"
-                 th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
-          <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
-            <ul class="list-unstyled mb-0">
-              <li th:each="error : ${#fields.errors('name')}" th:text="${error}"></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="mb-4">
-          <label for="targetUrl" class="form-label fw-semibold" th:text="#{form.url}">Target URL</label>
-          <input type="url"
-                 id="targetUrl"
-                 th:field="*{targetUrl}"
-                 class="form-control form-control-custom"
-                 th:placeholder="#{form.url.placeholder}"
-                 th:classappend="${#fields.hasErrors('targetUrl')} ? 'is-invalid' : ''">
-          <div th:if="${#fields.hasErrors('targetUrl')}" class="invalid-feedback">
-            <ul class="list-unstyled mb-0">
-              <li th:each="error : ${#fields.errors('targetUrl')}" th:text="${error}"></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="mb-4">
-          <label for="password" class="form-label fw-semibold" th:text="#{form.password}">Password (optional)</label>
-          <input type="password"
-                 id="password"
-                 th:field="*{password}"
-                 class="form-control form-control-custom"
-                 th:placeholder="#{form.password.placeholder}"
-                 th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
-          <small class="form-text text-muted">
-            <i class="bi bi-info-circle me-1"></i>
-            Password requirements: 10+ characters, 1+ lowercase, 2+ uppercase, 3+ digits, 4+ special characters
-          </small>
-          <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
-            <ul class="list-unstyled mb-0">
-              <li th:each="error : ${#fields.errors('password')}" th:text="${error}"></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="text-center">
-          <button type="submit" class="btn btn-primary btn-lg btn-custom">
-            <i class="bi bi-link-45deg me-2"></i>
-            <span th:text="#{form.submit}">Create Link</span>
-          </button>
-        </div>
-      </form>
     </div>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

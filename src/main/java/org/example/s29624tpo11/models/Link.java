@@ -1,10 +1,10 @@
 package org.example.s29624tpo11.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "links")
@@ -14,24 +14,17 @@ public class Link {
     @Column(length = 10)
     private String id;
 
-    @Size(min = 5, max = 20, message = "{name.size}")
+    @NotBlank
+    @Size(max = 200)
     @Column(name = "name", nullable = false)
     private String name;
 
     @NotNull
-    @Pattern(regexp = "^https://.*", message = "{url.https}")
-    @Column(name = "target_url", nullable = false, unique = true)
+    @Pattern(regexp = "^https?://.*", message = "URL must start with http:// or https://")
+    @Column(name = "target_url", nullable = false)
     private String targetUrl;
 
     @Column(name = "password")
-    @Pattern.List({
-            @Pattern(regexp = "^$|^.{10,}$", message = "{password.length.min}"),
-            @Pattern(regexp = "^$|^.*[a-z].*$", message = "{password.lowercase.required}"),
-            @Pattern(regexp = "^$|^(.*[A-Z]){2,}.*$", message = "{password.uppercase.min}"),
-            @Pattern(regexp = "^$|^(.*[0-9]){3,}.*$", message = "{password.digits.min}"),
-            @Pattern(regexp = "^$|^(.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]){4,}.*$", message = "{password.special.min}")
-    })
-    @Length(max = 100, message = "Password cannot exceed 100 characters")
     private String password;
 
     @Column(name = "visits", nullable = false)
