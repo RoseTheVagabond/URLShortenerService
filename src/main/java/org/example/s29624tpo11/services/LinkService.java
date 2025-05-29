@@ -113,4 +113,20 @@ public class LinkService {
 
         linkRepository.delete(link);
     }
+
+    public boolean linkHasPassword(String id) {
+        Link link = linkRepository.findById(id)
+                .orElseThrow(() -> new LinkNotFoundException("Link not found"));
+        return link.hasPassword();
+    }
+
+    public boolean verifyPassword(String id, String password) {
+        Link link = linkRepository.findById(id)
+                .orElseThrow(() -> new LinkNotFoundException("Link not found"));
+        return link.getPassword() != null && link.getPassword().equals(password);
+    }
+
+    public boolean isUrlAlreadyExists(String targetUrl) {
+        return linkRepository.existsByTargetUrl(targetUrl);
+    }
 }

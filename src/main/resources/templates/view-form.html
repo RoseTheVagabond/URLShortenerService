@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: html}">
+<head>
+  <title th:text="#{view.title}">View Link Information</title>
+</head>
+<body>
+<div th:fragment="content">
+  <div class="card card-custom">
+    <div class="card-body p-5">
+      <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary" th:text="#{view.title}">View Link Information</h1>
+        <p class="lead text-muted">Enter the link ID and password (if required) to view and manage your link</p>
+      </div>
+
+      <!-- Success Message -->
+      <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+
+      <!-- Error Message -->
+      <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+
+      <!-- View Link Form -->
+      <form th:action="@{/view}" method="post">
+        <div class="mb-4">
+          <label for="linkId" class="form-label fw-semibold" th:text="#{view.enter.id}">Enter Link ID</label>
+          <input type="text"
+                 id="linkId"
+                 name="linkId"
+                 class="form-control form-control-custom"
+                 placeholder="e.g., aBcDeFgHiJ"
+                 required>
+          <small class="form-text text-muted">
+            <i class="bi bi-info-circle me-1"></i>
+            The 10-character ID that was generated when you created the link
+          </small>
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="form-label fw-semibold" th:text="#{view.enter.password}">Enter Password (if required)</label>
+          <input type="password"
+                 id="password"
+                 name="password"
+                 class="form-control form-control-custom"
+                 placeholder="Enter password if link is protected">
+          <small class="form-text text-muted">
+            <i class="bi bi-shield-lock me-1"></i>
+            Only required if the link was created with a password
+          </small>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-lg btn-custom">
+            <i class="bi bi-search me-2"></i>
+            <span th:text="#{form.view}">View Link</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="text-center mt-4">
+        <a th:href="@{/}" class="btn btn-outline-secondary btn-custom">
+          <i class="bi bi-arrow-left me-2"></i>
+          <span th:text="#{back}">Back</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

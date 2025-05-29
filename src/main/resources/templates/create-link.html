@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base(content=~{::main})}">
+<body>
+<main>
+    <div class="card card-custom">
+        <div class="card-body p-5">
+            <!-- Error Message -->
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Create Link Form -->
+            <form action="/api/links" th:object="${createLinkDTO}" method="post" enctype="application/x-www-form-urlencoded">
+                <div class="mb-4">
+                    <label for="name" class="form-label fw-semibold" th:text="#{form.name}">Name</label>
+                    <input type="text"
+                           id="name"
+                           th:field="*{name}"
+                           class="form-control form-control-custom"
+                           th:placeholder="#{form.name.placeholder}"
+                           th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+                    <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                        <ul class="list-unstyled mb-0">
+                            <li th:each="error : ${#fields.errors('name')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="targetUrl" class="form-label fw-semibold" th:text="#{form.url}">Target URL</label>
+                    <input type="url"
+                           id="targetUrl"
+                           th:field="*{targetUrl}"
+                           class="form-control form-control-custom"
+                           th:placeholder="#{form.url.placeholder}"
+                           th:classappend="${#fields.hasErrors('targetUrl')} ? 'is-invalid' : ''">
+                    <div th:if="${#fields.hasErrors('targetUrl')}" class="invalid-feedback">
+                        <ul class="list-unstyled mb-0">
+                            <li th:each="error : ${#fields.errors('targetUrl')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold" th:text="#{form.password}">Password (optional)</label>
+                    <input type="password"
+                           id="password"
+                           th:field="*{password}"
+                           class="form-control form-control-custom"
+                           th:placeholder="#{form.password.placeholder}"
+                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
+                    <small class="form-text text-muted">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Password requirements: 10+ characters, 1+ lowercase, 2+ uppercase, 3+ digits, 4+ special characters
+                    </small>
+                    <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
+                        <ul class="list-unstyled mb-0">
+                            <li th:each="error : ${#fields.errors('password')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg btn-custom">
+                        <i class="bi bi-link-45deg me-2"></i>
+                        <span th:text="#{form.submit}">Create Link</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Link to view existing links -->
+            <div class="text-center mt-4">
+                <p class="text-muted">Already have a link? <a href="/api/links/YOUR_LINK_ID" class="text-decoration-none">View your link</a></p>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

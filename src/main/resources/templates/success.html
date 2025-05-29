@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: html}">
+<head>
+  <title th:text="#{success}">Success</title>
+</head>
+<body>
+<div th:fragment="content">
+  <div class="card card-custom">
+    <div class="card-body p-5">
+      <div class="text-center">
+        <div class="mb-4">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+        </div>
+
+        <h2 class="fw-bold text-success mb-3" th:text="#{success}">Success!</h2>
+
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+          <span th:text="${successMessage}"></span>
+        </div>
+
+        <div th:if="${createdLink}" class="mt-4">
+          <div class="card border-success">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0" th:text="#{view.link.details}">Link Details</h5>
+            </div>
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-sm-4 fw-semibold" th:text="#{view.link.id}">Link ID:</div>
+                <div class="col-sm-8">
+                  <code th:text="${createdLink.id}"></code>
+                  <button class="btn btn-sm btn-outline-secondary ms-2" onclick="copyToClipboard(this)" th:data-copy="${createdLink.id}">
+                    <i class="bi bi-clipboard"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-4 fw-semibold" th:text="#{view.link.name}">Name:</div>
+                <div class="col-sm-8" th:text="${createdLink.name}"></div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-4 fw-semibold" th:text="#{view.link.redirect}">Redirect URL:</div>
+                <div class="col-sm-8">
+                  <a th:href="${createdLink.redirectUrl}" th:text="${createdLink.redirectUrl}" target="_blank" class="text-break"></a>
+                  <button class="btn btn-sm btn-outline-secondary ms-2" onclick="copyToClipboard(this)" th:data-copy="${createdLink.redirectUrl}">
+                    <i class="bi bi-clipboard"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4 fw-semibold" th:text="#{view.link.target}">Target URL:</div>
+                <div class="col-sm-8">
+                  <a th:href="${createdLink.targetUrl}" th:text="${createdLink.targetUrl}" target="_blank" class="text-break"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <a th:href="@{/}" class="btn btn-primary btn-custom me-3">
+            <i class="bi bi-plus-circle me-2"></i>
+            Create Another Link
+          </a>
+          <a th:href="@{/view}" class="btn btn-outline-primary btn-custom">
+            <i class="bi bi-search me-2"></i>
+            <span th:text="#{nav.view}">View Link</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function copyToClipboard(button) {
+    const textToCopy = button.getAttribute('data-copy');
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      const originalIcon = button.innerHTML;
+      button.innerHTML = '<i class="bi bi-check"></i>';
+      button.classList.add('btn-success');
+      button.classList.remove('btn-outline-secondary');
+      setTimeout(() => {
+        button.innerHTML = originalIcon;
+        button.classList.remove('btn-success');
+        button.classList.add('btn-outline-secondary');
+      }, 2000);
+    });
+  }
+</script>
+</body>
+</html>

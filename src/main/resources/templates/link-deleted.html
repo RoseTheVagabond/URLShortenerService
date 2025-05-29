@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base(content=~{::main})}">
+<body>
+<main>
+  <div class="card card-custom">
+    <div class="card-body p-5">
+      <div class="text-center">
+        <div class="mb-4">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+        </div>
+
+        <h2 class="fw-bold text-success mb-3">Link Deleted Successfully!</h2>
+
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+          <span th:text="${successMessage}"></span>
+        </div>
+
+        <p class="text-muted mb-4">The link has been permanently removed from the system.</p>
+
+        <div class="mt-4">
+          <a href="/" class="btn btn-primary btn-custom">
+            <i class="bi bi-plus-circle me-2"></i>
+            Create New Link
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
