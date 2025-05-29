@@ -5,6 +5,7 @@ import org.example.s29624tpo11.DTOs.ResponseDTO;
 import org.example.s29624tpo11.DTOs.UpdateLinkDTO;
 import org.example.s29624tpo11.exceptions.LinkNotFoundException;
 import org.example.s29624tpo11.exceptions.WrongPasswordException;
+import org.example.s29624tpo11.exceptions.DuplicateNameException;
 import org.example.s29624tpo11.models.Link;
 import org.example.s29624tpo11.repositories.LinkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,11 @@ public class LinkService {
     }
 
     public ResponseDTO createLink(CreateLinkDTO request) {
+        // Check if name already exists
+        if (linkRepository.findByName(request.getName()).isPresent()) {
+            throw new DuplicateNameException("Link name already exists");
+        }
+
         String id;
         do {
             id = generateId();
@@ -54,6 +60,23 @@ public class LinkService {
     public ResponseDTO getLinkById(String id) {
         Link link = linkRepository.findById(id)
                 .orElseThrow(() -> new LinkNotFoundException("Link not found"));
+
+        return new ResponseDTO(link, baseUrl);
+    }
+
+    public ResponseDTO getLinkByName(String name, String password) {
+        Link link = linkRepository.findByName(name)
+                .orElseThrow(() -> new LinkNotFoundException("Link not found"));
+
+        if (link.hasPassword()) {
+            if (password == null || password.isEmpty()) {
+                throw new WrongPasswordException("Password required for protected link");
+            }
+
+            if (!password.equals(link.getPassword())) {
+                throw new WrongPasswordException("Wrong password");
+            }
+        }
 
         return new ResponseDTO(link, baseUrl);
     }

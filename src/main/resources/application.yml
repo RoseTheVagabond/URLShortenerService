@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: s29624-TPO11
@@ -16,6 +15,19 @@ spring:
       ddl-auto: create-drop
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    encoding: UTF-8
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/META-INF/resources/,classpath:/resources/,classpath:/public/
 
 app:
   base-url: http://localhost:8080
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always

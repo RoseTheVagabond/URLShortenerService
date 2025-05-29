@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{app.title}">URL Shortener</title>
+    <title th:text="#{create.success} + ' - ' + #{app.title}">Link Created - URL Shortener</title>
 
     <!-- Bootstrap CSS -->
     <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
@@ -18,27 +18,15 @@
             margin-bottom: 2rem;
         }
 
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 4rem 0;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
-        }
-
         .card {
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
             border: 1px solid rgba(0, 0, 0, 0.125);
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
         }
 
         .card-header {
-            background-color: #f8f9fa;
+            background-color: #d1ecf1;
             border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            color: #0c5460;
         }
 
         .btn-primary {
@@ -62,10 +50,19 @@
             min-width: 120px;
         }
 
-        .feature-icon {
-            font-size: 3rem;
-            color: #0d6efd;
+        .success-icon {
+            font-size: 4rem;
+            color: #198754;
             margin-bottom: 1rem;
+        }
+
+        .copy-btn {
+            cursor: pointer;
+        }
+
+        .copy-success {
+            color: #198754;
+            font-size: 0.875rem;
         }
     </style>
 </head>
@@ -82,7 +79,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/}" th:text="#{nav.home}">Home</a>
+                    <a class="nav-link" th:href="@{/}" th:text="#{nav.home}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/create}" th:text="#{nav.create}">Create Link</a>
@@ -115,40 +112,48 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
-    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span th:text="${errorMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-
-    <!-- Hero Section -->
-    <div class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-4 mb-4" th:text="#{home.title}">Welcome to URL Shortener</h1>
-            <p class="lead mb-4" th:text="#{home.description}">Create short links and track their usage</p>
-            <a th:href="@{/create}" class="btn btn-light btn-lg" th:text="#{home.get.started}">Get Started</a>
-        </div>
-    </div>
-
-    <!-- Features -->
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <div class="feature-icon">🔗</div>
-                    <h4 class="card-title" th:text="#{nav.create}">Create Link</h4>
-                    <p class="card-text">Create short links with optional password protection and custom names.</p>
-                    <a th:href="@{/create}" class="btn btn-primary" th:text="#{nav.create}">Create Link</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <div class="success-icon">✅</div>
+                    <h2 class="card-title mb-0" th:text="#{create.success}">Link created successfully!</h2>
                 </div>
-            </div>
-        </div>
+                <div class="card-body" th:if="${createdLink}">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold" th:text="#{details.name}">Name</label>
+                        <p class="form-control-plaintext" th:text="${createdLink.name}">Link Name</p>
+                    </div>
 
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <div class="feature-icon">🔍</div>
-                    <h4 class="card-title" th:text="#{nav.search}">Search Link</h4>
-                    <p class="card-text">Find your existing links and manage them with full edit and delete capabilities.</p>
-                    <a th:href="@{/search}" class="btn btn-primary" th:text="#{nav.search}">Search Link</a>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold" th:text="#{details.target.url}">Target URL</label>
+                        <p class="form-control-plaintext">
+                            <a th:href="${createdLink.targetUrl}" th:text="${createdLink.targetUrl}" target="_blank">Target URL</a>
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold" th:text="#{details.redirect.url}">Short URL</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" th:value="${createdLink.redirectUrl}" id="shortUrl" readonly>
+                            <button class="btn btn-outline-secondary copy-btn" type="button" onclick="copyToClipboard()">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <div id="copySuccess" class="copy-success mt-1" style="display: none;">
+                            Copied to clipboard!
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold" th:text="#{details.id}">Link ID</label>
+                        <p class="form-control-plaintext" th:text="${createdLink.id}">Link ID</p>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/create}" class="btn btn-primary">Create Another Link</a>
+                        <a th:href="@{/}" class="btn btn-outline-secondary" th:text="#{create.back}">Back to Home</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -166,5 +171,21 @@
 
 <!-- Bootstrap JS -->
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<script>
+    function copyToClipboard() {
+        const shortUrlInput = document.getElementById('shortUrl');
+        shortUrlInput.select();
+        shortUrlInput.setSelectionRange(0, 99999);
+
+        navigator.clipboard.writeText(shortUrlInput.value).then(function() {
+            const successDiv = document.getElementById('copySuccess');
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 2000);
+        });
+    }
+</script>
 </body>
 </html>

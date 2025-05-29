@@ -3,309 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <title th:text="#{details.title} + ' - ' + #{app.title}">Link Details - URL Shortener</title>
+
+    <!-- Bootstrap CSS -->
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+
     <style>
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
-        .card { border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
-        .btn-custom { border-radius: 25px; padding: 10px 30px; font-weight: 600; }
-        .form-control { border-radius: 15px; }
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .main-content {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            padding: 1rem 0;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+        }
+
+        .language-selector {
+            min-width: 120px;
+        }
+
+        .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .invalid-feedback {
+            display: block;
+        }
+
+        .details-icon {
+            font-size: 3rem;
+            color: #0d6efd;
+            margin-bottom: 1rem;
+        }
+
+        .copy-btn {
+            cursor: pointer;
+        }
+
+        .copy-success {
+            color: #198754;
+            font-size: 0.875rem;
+        }
+
+        .edit-section {
+            border-top: 1px solid #dee2e6;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
     </style>
 </head>
 <body>
-<div class="container py-5">
-    <!-- Language Selector -->
-    <div class="position-fixed top-0 end-0 p-3">
-        <div class="btn-group">
-            <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-                <i class="bi bi-globe"></i> Language
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" th:href="@{/view(lang='en')}">English</a></li>
-                <li><a class="dropdown-item" th:href="@{/view(lang='pl')}">Polski</a></li>
-                <li><a class="dropdown-item" th:href="@{/view(lang='de')}">Deutsch</a></li>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}" th:text="#{app.title}">URL Shortener</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}" th:text="#{nav.home}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/create}" th:text="#{nav.create}">Create Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/search}" th:text="#{nav.search}">Search Link</a>
+                </li>
             </ul>
+
+            <!-- Language Selector -->
+            <div class="dropdown">
+                <button class="btn btn-outline-light dropdown-toggle language-selector" type="button" data-bs-toggle="dropdown">
+                    <span th:text="#{nav.language}">Language</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" th:href="@{''(lang=en)}">English</a></li>
+                    <li><a class="dropdown-item" th:href="@{''(lang=pl)}">Polski</a></li>
+                    <li><a class="dropdown-item" th:href="@{''(lang=de)}">Deutsch</a></li>
+                </ul>
+            </div>
         </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container main-content">
+    <!-- Flash Messages -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <!-- Success Message -->
-            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>
-                <span th:text="${successMessage}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-
-            <!-- Error Message -->
-            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>
-                <span th:text="${errorMessage}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-
-            <!-- Link Details -->
-            <div class="card mb-4">
-                <div class="card-header bg-info text-white">
-                    <h3 class="mb-0">
-                        <i class="bi bi-link-45deg me-2"></i>
-                        <span th:text="${link.name}">Link Name</span>
-                    </h3>
+        <div class="col-md-10 col-lg-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <div class="details-icon">📋</div>
+                    <h2 class="card-title mb-0" th:text="#{details.title}">Link Details</h2>
                 </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-sm-3 fw-semibold">
-                            <span th:if="${lang == 'pl'}">ID Linku:</span>
-                            <span th:if="${lang == 'de'}">Link-ID:</span>
-                            <span th:if="${lang == 'en' or lang == null}">Link ID:</span>
-                        </div>
-                        <div class="col-sm-9">
-                            <code th:text="${link.id}"></code>
-                            <button class="btn btn-sm btn-outline-secondary ms-2" onclick="copyToClipboard(this)" th:data-copy="${link.id}">
-                                <i class="bi bi-clipboard"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3 fw-semibold">
-                            <span th:if="${lang == 'pl'}">Docelowy URL:</span>
-                            <span th:if="${lang == 'de'}">Ziel-URL:</span>
-                            <span th:if="${lang == 'en' or lang == null}">Target URL:</span>
-                        </div>
-                        <div class="col-sm-9">
-                            <a th:href="${link.targetUrl}" th:text="${link.targetUrl}" target="_blank" class="text-break"></a>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3 fw-semibold">
-                            <span th:if="${lang == 'pl'}">URL Przekierowania:</span>
-                            <span th:if="${lang == 'de'}">Weiterleitungs-URL:</span>
-                            <span th:if="${lang == 'en' or lang == null}">Redirect URL:</span>
-                        </div>
-                        <div class="col-sm-9">
-                            <a th:href="${link.redirectUrl}" th:text="${link.redirectUrl}" target="_blank" class="text-break"></a>
-                            <button class="btn btn-sm btn-outline-secondary ms-2" onclick="copyToClipboard(this)" th:data-copy="${link.redirectUrl}">
-                                <i class="bi bi-clipboard"></i>
-                            </button>
-                        </div>
-                    </div>
+                <div class="card-body" th:if="${link}">
+                    <!-- Link Information -->
                     <div class="row">
-                        <div class="col-sm-3 fw-semibold">
-                            <span th:if="${lang == 'pl'}">Odwiedziny:</span>
-                            <span th:if="${lang == 'de'}">Besuche:</span>
-                            <span th:if="${lang == 'en' or lang == null}">Visits:</span>
-                        </div>
-                        <div class="col-sm-9">
-                            <span class="badge bg-success fs-6" th:text="${link.visits}">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Edit Form -->
-            <div class="card mb-4">
-                <div class="card-header bg-warning text-dark">
-                    <h4 class="mb-0">
-                        <i class="bi bi-pencil me-2"></i>
-                        <span th:if="${lang == 'pl'}">Edytuj Link</span>
-                        <span th:if="${lang == 'de'}">Link bearbeiten</span>
-                        <span th:if="${lang == 'en' or lang == null}">Edit Link</span>
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <form th:action="@{/update/{id}(id=${link.id})}" th:object="${updateLinkDTO}" method="post">
-                        <input type="hidden" name="lang" th:value="${lang}">
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="updateName" class="form-label fw-semibold">
-                                    <span th:if="${lang == 'pl'}">Nazwa</span>
-                                    <span th:if="${lang == 'de'}">Name</span>
-                                    <span th:if="${lang == 'en' or lang == null}">Name</span>
-                                </label>
-                                <input type="text"
-                                       id="updateName"
-                                       th:field="*{name}"
-                                       class="form-control"
-                                       th:placeholder="${link.name}"
-                                       th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
-                                <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
-                                    <div th:each="error : ${#fields.errors('name')}" th:text="${error}"></div>
-                                </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold" th:text="#{details.id}">Link ID</label>
+                                <p class="form-control-plaintext" th:text="${link.id}">Link ID</p>
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="updateTargetUrl" class="form-label fw-semibold">
-                                    <span th:if="${lang == 'pl'}">Docelowy URL</span>
-                                    <span th:if="${lang == 'de'}">Ziel-URL</span>
-                                    <span th:if="${lang == 'en' or lang == null}">Target URL</span>
-                                </label>
-                                <input type="url"
-                                       id="updateTargetUrl"
-                                       th:field="*{targetUrl}"
-                                       class="form-control"
-                                       th:placeholder="${link.targetUrl}"
-                                       th:classappend="${#fields.hasErrors('targetUrl')} ? 'is-invalid' : ''">
-                                <div th:if="${#fields.hasErrors('targetUrl')}" class="invalid-feedback">
-                                    <div th:each="error : ${#fields.errors('targetUrl')}" th:text="${error}"></div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold" th:text="#{details.name}">Name</label>
+                                <p class="form-control-plaintext" th:text="${link.name}">Link Name</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold" th:text="#{details.visits}">Visit Count</label>
+                                <p class="form-control-plaintext">
+                                    <span class="badge bg-primary fs-6" th:text="${link.visits}">0</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold" th:text="#{details.target.url}">Target URL</label>
+                                <p class="form-control-plaintext">
+                                    <a th:href="${link.targetUrl}" th:text="${link.targetUrl}" target="_blank" class="text-break">Target URL</a>
+                                </p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold" th:text="#{details.redirect.url}">Short URL</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" th:value="${link.redirectUrl}" id="shortUrl" readonly>
+                                    <button class="btn btn-outline-secondary copy-btn" type="button" onclick="copyToClipboard()">
+                                        📋
+                                    </button>
+                                </div>
+                                <div id="copySuccess" class="copy-success mt-1" style="display: none;">
+                                    Copied to clipboard!
                                 </div>
                             </div>
                         </div>
-
-                        <div class="mb-4">
-                            <label for="updatePassword" class="form-label fw-semibold">
-                                <span th:if="${lang == 'pl'}">Hasło</span>
-                                <span th:if="${lang == 'de'}">Passwort</span>
-                                <span th:if="${lang == 'en' or lang == null}">Password</span>
-                            </label>
-                            <input type="password"
-                                   id="updatePassword"
-                                   th:field="*{password}"
-                                   class="form-control"
-                                   th:placeholder="${lang == 'pl'} ? 'Wprowadź obecne hasło aby autoryzować zmiany' : (${lang == 'de'} ? 'Aktuelles Passwort zur Autorisierung eingeben' : 'Enter current password to authorize changes')"
-                                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
-                            <small class="form-text text-muted">
-                                <i class="bi bi-shield-lock me-1"></i>
-                                <span th:if="${lang == 'pl'}">Wymagane do autoryzacji jeśli link ma ochronę hasłem</span>
-                                <span th:if="${lang == 'de'}">Erforderlich zur Autorisierung, falls Link passwortgeschützt ist</span>
-                                <span th:if="${lang == 'en' or lang == null}">Required for authorization if link has password protection</span>
-                            </small>
-                            <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
-                                <div th:each="error : ${#fields.errors('password')}" th:text="${error}"></div>
-                            </div>
-                        </div>
-
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-success btn-custom">
-                                <i class="bi bi-check-lg me-2"></i>
-                                <span th:if="${lang == 'pl'}">Zaktualizuj Link</span>
-                                <span th:if="${lang == 'de'}">Link aktualisieren</span>
-                                <span th:if="${lang == 'en' or lang == null}">Update Link</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Delete Form -->
-            <div class="card mb-4">
-                <div class="card-header bg-danger text-white">
-                    <h4 class="mb-0">
-                        <i class="bi bi-trash me-2"></i>
-                        <span th:if="${lang == 'pl'}">Usuń Link</span>
-                        <span th:if="${lang == 'de'}">Link löschen</span>
-                        <span th:if="${lang == 'en' or lang == null}">Delete Link</span>
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-warning" role="alert">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        <strong>
-                            <span th:if="${lang == 'pl'}">Uwaga:</span>
-                            <span th:if="${lang == 'de'}">Warnung:</span>
-                            <span th:if="${lang == 'en' or lang == null}">Warning:</span>
-                        </strong>
-                        <span th:if="${lang == 'pl'}">Ta akcja nie może zostać cofnięta. Link zostanie trwale usunięty.</span>
-                        <span th:if="${lang == 'de'}">Diese Aktion kann nicht rückgängig gemacht werden. Der Link wird dauerhaft gelöscht.</span>
-                        <span th:if="${lang == 'en' or lang == null}">This action cannot be undone. The link will be permanently deleted.</span>
                     </div>
 
-                    <form th:action="@{/delete/{id}(id=${link.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this link?');">
-                        <input type="hidden" name="lang" th:value="${lang}">
+                    <!-- Edit Section -->
+                    <div class="edit-section">
+                        <h4 class="mb-3" th:text="#{details.edit}">Edit Link</h4>
 
-                        <div class="mb-3">
-                            <label for="deletePassword" class="form-label fw-semibold">
-                                <span th:if="${lang == 'pl'}">Hasło (jeśli wymagane)</span>
-                                <span th:if="${lang == 'de'}">Passwort (falls erforderlich)</span>
-                                <span th:if="${lang == 'en' or lang == null}">Password (if required)</span>
-                            </label>
-                            <input type="password"
-                                   id="deletePassword"
-                                   name="password"
-                                   class="form-control"
-                                   th:placeholder="${lang == 'pl'} ? 'Wprowadź hasło jeśli link jest chroniony' : (${lang == 'de'} ? 'Passwort eingeben, falls Link geschützt ist' : 'Enter password if link is protected')">
-                        </div>
+                        <form th:action="@{'/link/' + ${link.id} + '/edit'}" th:object="${updateLinkDTO}" method="post">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- New Name Field -->
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label" th:text="#{edit.form.name}">New Name</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               th:class="${#fields.hasErrors('name')} ? 'form-control is-invalid' : 'form-control'"
+                                               id="name"
+                                               th:field="*{name}"
+                                               th:placeholder="#{edit.form.name.placeholder}">
+                                        <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                                            <span th:errors="*{name}"></span>
+                                        </div>
+                                    </div>
 
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-danger btn-custom">
-                                <i class="bi bi-trash me-2"></i>
-                                <span th:if="${lang == 'pl'}">Usuń Link</span>
-                                <span th:if="${lang == 'de'}">Link löschen</span>
-                                <span th:if="${lang == 'en' or lang == null}">Delete Link</span>
-                            </button>
-                        </div>
-                    </form>
+                                    <!-- New Target URL Field -->
+                                    <div class="mb-3">
+                                        <label for="targetUrl" class="form-label" th:text="#{edit.form.url}">New Target URL</label>
+                                        <input type="url"
+                                               class="form-control"
+                                               th:class="${#fields.hasErrors('targetUrl')} ? 'form-control is-invalid' : 'form-control'"
+                                               id="targetUrl"
+                                               th:field="*{targetUrl}"
+                                               th:placeholder="#{edit.form.url.placeholder}">
+                                        <div th:if="${#fields.hasErrors('targetUrl')}" class="invalid-feedback">
+                                            <span th:errors="*{targetUrl}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <!-- Current Password Field -->
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label" th:text="#{edit.form.password}">Current Password</label>
+                                        <input type="password"
+                                               class="form-control"
+                                               th:class="${#fields.hasErrors('password')} ? 'form-control is-invalid' : 'form-control'"
+                                               id="password"
+                                               th:field="*{password}"
+                                               th:placeholder="#{edit.form.password.placeholder}">
+                                        <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
+                                            <span th:errors="*{password}"></span>
+                                        </div>
+                                        <div class="form-text">
+                                            <small>Required only if link is password protected</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex gap-2 justify-content-center">
+                                <button type="submit" class="btn btn-primary" th:text="#{edit.form.submit}">Update Link</button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" th:text="#{details.delete}">Delete Link</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <a th:href="@{/search}" class="btn btn-outline-secondary" th:text="#{details.back}">Back to Search</a>
+                    </div>
                 </div>
-            </div>
-
-            <div class="text-center">
-                <a th:href="@{/view(lang=${lang})}" class="btn btn-outline-secondary btn-custom me-3">
-                    <i class="bi bi-arrow-left me-2"></i>
-                    <span th:if="${lang == 'pl'}">Wstecz</span>
-                    <span th:if="${lang == 'de'}">Zurück</span>
-                    <span th:if="${lang == 'en' or lang == null}">Back</span>
-                </a>
-                <a href="/" class="btn btn-outline-primary btn-custom">
-                    <i class="bi bi-house me-2"></i>
-                    <span th:if="${lang == 'pl'}">Strona główna</span>
-                    <span th:if="${lang == 'de'}">Startseite</span>
-                    <span th:if="${lang == 'en' or lang == null}">Home</span>
-                </a>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" th:text="#{details.delete}">Delete Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p th:text="#{delete.confirm}">Are you sure you want to delete this link?</p>
+            </div>
+            <div class="modal-footer">
+                <form th:action="@{'/link/' + ${link.id} + '/delete'}" method="post">
+                    <input type="hidden" name="password" id="deletePassword">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{delete.cancel}">Cancel</button>
+                    <button type="submit" class="btn btn-danger" th:text="#{delete.confirm.button}">Yes, Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="text-center">
+            <small>&copy; 2025 URL Shortener. All rights reserved.</small>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
 <script>
-    function copyToClipboard(button) {
-        const textToCopy = button.getAttribute('data-copy');
-        if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showCopySuccess(button);
-            }).catch(err => {
-                fallbackCopy(textToCopy, button);
-            });
-        } else {
-            fallbackCopy(textToCopy, button);
-        }
+    function copyToClipboard() {
+        const shortUrlInput = document.getElementById('shortUrl');
+        shortUrlInput.select();
+        shortUrlInput.setSelectionRange(0, 99999);
+
+        navigator.clipboard.writeText(shortUrlInput.value).then(function() {
+            const successDiv = document.getElementById('copySuccess');
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 2000);
+        });
     }
 
-    function fallbackCopy(text, button) {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        textArea.style.top = '-999999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-            document.execCommand('copy');
-            showCopySuccess(button);
-        } catch (err) {
-            console.error('Failed to copy text: ', err);
-        } finally {
-            document.body.removeChild(textArea);
-        }
-    }
-
-    function showCopySuccess(button) {
-        const originalContent = button.innerHTML;
-        button.innerHTML = '<i class="bi bi-check"></i>';
-        button.classList.remove('btn-outline-secondary');
-        button.classList.add('btn-success');
-        button.disabled = true;
-
-        setTimeout(() => {
-            button.innerHTML = originalContent;
-            button.classList.remove('btn-success');
-            button.classList.add('btn-outline-secondary');
-            button.disabled = false;
-        }, 2000);
-    }
+    // Transfer password from edit form to delete form
+    document.getElementById('deleteModal').addEventListener('show.bs.modal', function() {
+        const editPassword = document.getElementById('password').value;
+        document.getElementById('deletePassword').value = editPassword;
+    });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

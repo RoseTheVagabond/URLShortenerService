@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{app.title}">URL Shortener</title>
+    <title th:text="'Error - ' + #{app.title}">Error - URL Shortener</title>
 
     <!-- Bootstrap CSS -->
     <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
@@ -18,27 +18,15 @@
             margin-bottom: 2rem;
         }
 
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 4rem 0;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
-        }
-
         .card {
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
             border: 1px solid rgba(0, 0, 0, 0.125);
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
         }
 
         .card-header {
-            background-color: #f8f9fa;
+            background-color: #f8d7da;
             border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+            color: #721c24;
         }
 
         .btn-primary {
@@ -62,9 +50,9 @@
             min-width: 120px;
         }
 
-        .feature-icon {
-            font-size: 3rem;
-            color: #0d6efd;
+        .error-icon {
+            font-size: 4rem;
+            color: #dc3545;
             margin-bottom: 1rem;
         }
     </style>
@@ -82,7 +70,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/}" th:text="#{nav.home}">Home</a>
+                    <a class="nav-link" th:href="@{/}" th:text="#{nav.home}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/create}" th:text="#{nav.create}">Create Link</a>
@@ -109,46 +97,20 @@
 
 <!-- Main Content -->
 <div class="container main-content">
-    <!-- Flash Messages -->
-    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${successMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-
-    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span th:text="${errorMessage}"></span>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-
-    <!-- Hero Section -->
-    <div class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-4 mb-4" th:text="#{home.title}">Welcome to URL Shortener</h1>
-            <p class="lead mb-4" th:text="#{home.description}">Create short links and track their usage</p>
-            <a th:href="@{/create}" class="btn btn-light btn-lg" th:text="#{home.get.started}">Get Started</a>
-        </div>
-    </div>
-
-    <!-- Features -->
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <div class="feature-icon">🔗</div>
-                    <h4 class="card-title" th:text="#{nav.create}">Create Link</h4>
-                    <p class="card-text">Create short links with optional password protection and custom names.</p>
-                    <a th:href="@{/create}" class="btn btn-primary" th:text="#{nav.create}">Create Link</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <div class="error-icon">❌</div>
+                    <h2 class="card-title mb-0">Error</h2>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
                 <div class="card-body text-center">
-                    <div class="feature-icon">🔍</div>
-                    <h4 class="card-title" th:text="#{nav.search}">Search Link</h4>
-                    <p class="card-text">Find your existing links and manage them with full edit and delete capabilities.</p>
-                    <a th:href="@{/search}" class="btn btn-primary" th:text="#{nav.search}">Search Link</a>
+                    <p class="card-text" th:text="${errorMessage} ?: #{error.generic}">An error occurred while processing your request</p>
+
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/}" class="btn btn-primary">Go to Home</a>
+                        <a th:href="@{/search}" class="btn btn-outline-secondary">Search Again</a>
+                    </div>
                 </div>
             </div>
         </div>

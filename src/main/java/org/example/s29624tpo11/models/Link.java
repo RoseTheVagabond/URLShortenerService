@@ -7,7 +7,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "links")
+@Table(name = "links", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name")
+})
 public class Link {
 
     @Id
@@ -16,7 +18,7 @@ public class Link {
 
     @NotBlank
     @Size(max = 200)
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @NotNull
