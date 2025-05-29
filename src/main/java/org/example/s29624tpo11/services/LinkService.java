@@ -41,7 +41,6 @@ public class LinkService {
     }
 
     public ResponseDTO createLink(CreateLinkDTO request) {
-        // Check if name already exists
         if (linkRepository.findByName(request.getName()).isPresent()) {
             throw new DuplicateNameException("Link name already exists");
         }
