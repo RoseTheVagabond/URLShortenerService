@@ -3,6 +3,7 @@ package org.example.s29624tpo11.controllers;
 import jakarta.validation.Valid;
 import org.example.s29624tpo11.DTOs.CreateLinkDTO;
 import org.example.s29624tpo11.DTOs.ResponseDTO;
+import org.example.s29624tpo11.DTOs.SearchLinkDTO;
 import org.example.s29624tpo11.DTOs.UpdateLinkDTO;
 import org.example.s29624tpo11.exceptions.LinkNotFoundException;
 import org.example.s29624tpo11.exceptions.WrongPasswordException;
@@ -75,12 +76,12 @@ public class WebController {
 
     @GetMapping("/search")
     public String searchForm(Model model) {
-        model.addAttribute("searchRequest", new SearchLinkRequest());
+        model.addAttribute("searchRequest", new SearchLinkDTO());
         return "search";
     }
 
     @PostMapping("/search")
-    public String searchLink(@ModelAttribute SearchLinkRequest searchRequest,
+    public String searchLink(@ModelAttribute SearchLinkDTO searchRequest,
                              Model model,
                              Locale locale) {
         try {
@@ -170,16 +171,5 @@ public class WebController {
     @GetMapping("/error")
     public String errorPage() {
         return "error";
-    }
-
-    // Inner class for search request
-    public static class SearchLinkRequest {
-        private String name;
-        private String password;
-
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
     }
 }

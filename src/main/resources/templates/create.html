@@ -93,7 +93,7 @@
 
                         <div class="mb-3">
                             <label for="password" class="form-label" th:text="#{create.form.password}">Password (Optional)</label>
-                            <input type="password"
+                            <input type="text"
                                    class="form-control"
                                    th:class="${#fields.hasErrors('password')} ? 'form-control is-invalid' : 'form-control'"
                                    id="password"

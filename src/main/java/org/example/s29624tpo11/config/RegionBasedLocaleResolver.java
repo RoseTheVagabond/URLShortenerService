@@ -10,28 +10,23 @@ public class RegionBasedLocaleResolver implements LocaleResolver {
 
     @Override
     public Locale resolveLocale(HttpServletRequest request) {
-        // Check for explicit lang parameter first
         String langParam = request.getParameter("lang");
         if (langParam != null) {
             return getLocaleFromLangParam(langParam);
         }
 
-        // Check for lang header (for API calls)
         String langHeader = request.getHeader("lang");
         if (langHeader != null) {
             return getLocaleFromLangParam(langHeader);
         }
 
-        // Check session for previously set locale
         Locale sessionLocale = (Locale) request.getSession().getAttribute("locale");
         if (sessionLocale != null) {
             return sessionLocale;
         }
 
-        // Try to determine from Accept-Language header
         String acceptLanguage = request.getHeader("Accept-Language");
         if (acceptLanguage != null) {
-            // Parse the Accept-Language header
             String[] languages = acceptLanguage.split(",");
             for (String lang : languages) {
                 String langCode = lang.trim().split(";")[0].toLowerCase();
@@ -43,8 +38,6 @@ public class RegionBasedLocaleResolver implements LocaleResolver {
                 }
             }
         }
-
-        // Default to English
         return Locale.ENGLISH;
     }
 
