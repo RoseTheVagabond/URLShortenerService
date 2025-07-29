@@ -94,20 +94,12 @@ public class InternationalizationConfig implements WebMvcConfigurer, LocaleResol
    - Add `?lang=pl` or `?lang=de` to any URL
    - Or send `Accept-Language` header in API requests
 
-## Implementation Highlights
-
-- **Security-First Design**: Password hashing and validation at multiple layers
-- **Performance Optimized**: Efficient ID generation with collision detection
-- **Error Resilience**: Comprehensive exception handling with user-friendly messaging
-- **Scalable Architecture**: Stateless design ready for horizontal scaling
-- **Developer Experience**: Clean code structure with comprehensive validation feedback
-
 ## Database Schema
 
 - **Optimized Storage**: Efficient indexing on unique constraints
 - **Data Integrity**: Foreign key relationships and cascade operations
 - **Visit Tracking**: Atomic increment operations for accurate analytics
 
----
+## Demo Video
 
-*Built with modern Spring Boot practices, emphasizing clean architecture, internationalization, and enterprise-grade validation patterns.*
+[![Demo](https://img.shields.io/badge/▶️-Watch%20Demo-red?style=for-the-badge&logo=youtube)](https://youtu.be/tOwIbK0Jp4o)
